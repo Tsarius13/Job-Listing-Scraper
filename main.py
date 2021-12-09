@@ -295,7 +295,6 @@ class indeed:
 
     # The retrieval function that gets all job postings within the indicated keywords and filters if any
     def dataRetrieval(self):
-        flag = False
         # Loop through each retrieved structure and extract particular elements
         for results_index in range(0, self.results_endpoint, 10):
 
