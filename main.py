@@ -6,11 +6,6 @@ import pandas as pd
 import re
 from re import search
 
-
-# Make sure internet is enabled!!!
-# Still working on getting javascript scraping going
-# Switching gears to scrape from Indeed
-
 class indeed:
 
     def __init__(self):
