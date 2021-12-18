@@ -7,6 +7,7 @@ Master branch contains most up-to-date version of scraper for PC. Some features 
 filter specific jobs, and exporting of retrieved data to various file types. This version cannot be used on Android since Android does not support multithreading.
 
 Future plans include:
+
 Creating a UI to replace the usage of user prompts and generate a better experience for users
 
 Scripting the program to run off command lines
