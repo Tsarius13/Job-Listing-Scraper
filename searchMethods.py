@@ -12,15 +12,12 @@ class advancedSearch:
         "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC,", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY",
         "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH",
         "OK", "OR", "PA", "PR", "RI", "SD", "SC", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
-    dateSort = str(("no", 24, 3, 7, 14))
+    dateSort = str(("no", 24, "24 hours", 3, "3 days", 7, "7 days", 14, "14 days"))
     level = ("entry", "mid", "senior")
     types = ("full", "full-time", "part", "part-time", "temporary", "contract", "internship")
     degrees = ("high", "school", "high school", "bachelor's", "master's", "associate's", "doctoral")
 
-    def __init__(self, base_url, search_start, query, selfSearch):
-        self.base_url = base_url
-        self.search_start = search_start
-        self.query = query
+    def __init__(self, selfSearch):
         self.search = selfSearch
 
     def ynInputCheck(self, promptedInput):
@@ -32,13 +29,12 @@ class advancedSearch:
         choice = ""
         while ("exit" not in choice.lower()):
             choice = input(
-                "Enter an advanced search option\n" + "The choices are by Date, Radius, Remote, Salary, Experience Level, "
-                                                      "Location, Job Type, Education, "
-                                                      "or enter exit to search: ")
-            # Entering a query with multiple words is somehow not recognized
+                "Enter an advanced search option and keep in mind that each option can only search by one category at a time\n" +
+                "The choices are by Date, Radius, Remote, Salary, Experience Level, Location, Job Type, Education, or enter exit to search: ")
             while not choice.isalpha() or not choice or choice.lower().replace(" ", "") not in self.advOptions:
                 choice = input("Not a valid option. If your choice is multiple words, try just entering one of them: ")
             choice = choice.lower()
+
             # Match against the different supported filters in Indeed.com
             if "date" in choice:
                 self.dateQuery()
@@ -74,6 +70,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.date)
                 self.date = ""
+                print("Date Tag Removed")
                 return
             else:
                 self.filterRemoval(self.date)
@@ -89,6 +86,7 @@ class advancedSearch:
         else:
             self.date += choice
         self.search += self.date
+        print("Date Tag Added")
 
     # Filters results based on city and state
     def locationQuery(self):
@@ -97,6 +95,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.location)
                 self.location = ""
+                print("Location Removed")
                 return
             else:
                 self.filterRemoval(self.location)
@@ -118,6 +117,7 @@ class advancedSearch:
         self.location += "%2C" + state
         self.location = self.location.lstrip()
         self.search += self.location
+        print("Location Added")
 
     # Filters results based on search radius of the location
     def radiusQuery(self):
@@ -126,29 +126,32 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.radius)
                 self.radius = ""
+                print("Search Radius Removed")
                 return
             else:
                 self.filterRemoval(self.radius)
 
         choice = input(
-            "Enter a radius in the set 0, 5, 10, 15, 25, 50, or 100: ")
+            "Enter a radius in the set 0, 5, 10, 15, 25, 50, or 100 miles: ")
         while choice not in self.searchRadius or not choice:
-            choice = input("Enter a radius in the set 0, 5, 10, 15, 25, 50 or 100: ")
+            choice = input("Enter a radius in the set 0, 5, 10, 15, 25, 50 or 100 miles: ")
 
         self.radius = "&radius=" + choice
         self.search += self.radius
+        print("Search Radius Added")
 
     # Flag to indicate searching for designated remote jobs
     def remoteQuery(self):
         if not self.remote:
             self.remote = "&remotejob=1"
             self.search += self.remote
+            print("Remote Tag Added")
         else:
             choice = input("Would you like to remove the remote tag from your search? ")
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.remote)
                 self.remote = ""
-        print("Done")
+                print("Remote Tag Removed")
 
     # Filters results based on a user defined salary number
     def salaryQuery(self):
@@ -157,6 +160,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.salary)
                 self.salary = ""
+                print("Salary Tag Removed")
                 return
             else:
                 self.filterRemoval(self.salary)
@@ -166,6 +170,7 @@ class advancedSearch:
             choice = input("Not a valid number. Try again.  ")
         self.salary = "&salaryType=%24" + choice
         self.search += self.salary
+        print("Salary Tag Added")
 
     # Filters results based on experience level
     def levelQuery(self):
@@ -174,6 +179,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.experience_level)
                 self.experience_level = ""
+                print("Experience Level Removed")
                 return
             else:
                 self.filterRemoval(self.experience_level)
@@ -184,6 +190,7 @@ class advancedSearch:
         choice = choice.lower()
         self.experience_level = "&explvl=" + choice + "_level"
         self.search += self.experience_level
+        print("Experience Level Added")
 
     # Filters results based on the type of job
     def typeQuery(self):
@@ -192,6 +199,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.job_type)
                 self.job_type = ""
+                print("Job Type Removed")
                 return
             else:
                 self.filterRemoval(self.job_type)
@@ -204,6 +212,7 @@ class advancedSearch:
             choice = noDash
         self.job_type = "&jt=" + choice.lower()
         self.search += self.job_type
+        print("Job Type Added")
 
     # Filters results based on education level
     def eduQuery(self):
@@ -212,6 +221,7 @@ class advancedSearch:
             if "yes" in self.ynInputCheck(choice):
                 self.filterRemoval(self.education)
                 self.education = ""
+                print("Education Level Removed")
                 return
             else:
                 self.filterRemoval(self.education)
@@ -224,13 +234,9 @@ class advancedSearch:
         if "'s" in choice:
             temp = choice.replace("'s", "")
             choice = temp
-        # Trying to account for multiple word input here with no luck
         if "high" in choice or "school" in choice or "high school" in choice:
             self.education = "&education=" + "high_school_degree"
         else:
             self.education = "&education=" + choice + "_degree"
         self.search += self.education
-
-
-class dictSearch:
-    start = {}
+        print('Education Level Added')
