@@ -10,7 +10,7 @@ Future plans include:
 
 Creating a UI to replace the usage of user prompts and generate a better experience for users
 
-Packaging program into an executable once above tasks are completed
+Packaging program into an executable
 
 Optimizing an Android specific version and possibly creating an app around it
 
