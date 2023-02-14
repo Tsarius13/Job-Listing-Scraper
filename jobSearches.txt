@@ -1,0 +1,4 @@
+Entry+Level+Software+Engineer,&l=United+States,Entry Level Software Engineer (States), entry_software_states, 5
+Entry+Level+Software,&l=Phoenix%2CAZ,Entry Level Software Engineer (Phoenix), entry_software_phoenix, 2
+Junior+Software+Engineer,&l=United+States,Junior Level Software Engineer (States), junior_software_states, 5
+Junior+Software,&l=Phoenix%2CAZ,Junior Level Software Engineer (Phoneix), junior_software_phoenix, 2
