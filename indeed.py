@@ -1,5 +1,4 @@
 import pandas as pd
-from searchMethods import advancedIndeedSearch
 from datetime import date, datetime
 from multiprocessing.dummy import Pool
 from selenium.webdriver.remote.webdriver import By
@@ -71,6 +70,7 @@ class indeed:
     # Utilizes multithreading to retrieve multiple pages at once, reducing overall runtime
     def multiProcess(self, urls):
 
+        print("Starting retrieval for new search")
         pool = Pool(5)
         pool.map(self.scrape, urls)
 
@@ -86,7 +86,7 @@ class indeed:
         time.sleep(10)
 
         jobs = driver.find_elements(
-            By.CLASS_NAME, 'slider_container.css-g7s71f.eu4oa1w0')
+            By.CLASS_NAME, 'slider_container.css-77eoo7.eu4oa1w0')
 
         newPool = Pool(15)
         newPool.map(self.trawl, jobs)
@@ -149,13 +149,13 @@ class indeed:
                 titles, companies, locations, salaries, descriptions, links = zip(
                     *self.positions)
                 jobs = pd.DataFrame({
-                    'Job Title': titles,
+                    'Job_Title': titles,
                     'Company': companies,
-                    'Location(s)': locations,
-                    'Salary and Hour Info': salaries,
-                    'Job Description': descriptions,
-                    'Link to Posting': links,
-                    'Date Added to List': str(date.today()),
+                    'Location': locations,
+                    'Salary_and_Hour_Info': salaries,
+                    'Job_Description': descriptions,
+                    'Link_to_Posting': links,
+                    'Date_Added_to_List': str(date.today()),
                     'Applied': 0,
                     'Interviewed': 0,
                     'Rejected': 0
@@ -164,31 +164,31 @@ class indeed:
                 jobs = jobs.drop_duplicates(keep='first')
                 jobs.to_csv(self.fileTitle + '.csv', mode='a', header=False)
                 with open('Operation Log.txt', 'a') as f:
-                    f.write('Recorded new jobs in' + str(self.fileTitle) + '.csv @ ' +
+                    f.write('Recorded new jobs in ' + str(self.fileTitle) + '.csv @ ' +
                             str(datetime.now()) + '\n')
-                self.sql.sql_insert(jobs, self.tableTitle)
+                self.sql.sql_insert_jobs(jobs, self.tableTitle)
             else:
                 titles, companies, locations, salaries, descriptions, links = zip(
                     *self.positions)
                 jobs = pd.DataFrame({
-                    'Job Title': titles,
+                    'Job_Title': titles,
                     'Company': companies,
-                    'Location(s)': locations,
-                    'Salary and Hour Info': salaries,
-                    'Job Description': descriptions,
-                    'Link to Posting': links,
-                    'Date Added to List': str(date.today()),
+                    'Location': locations,
+                    'Salary_and_Hour_Info': salaries,
+                    'Job_Description': descriptions,
+                    'Link_to_Posting': links,
+                    'Date_Added_to_List': str(date.today()),
                     'Applied': 0,
                     'Interviewed': 0,
                     'Rejected': 0
                 })
-                jobs.index += 1
                 jobs = jobs.drop_duplicates(keep='first')
+                jobs.index += 1
                 jobs.to_csv(self.fileTitle + '.csv')
                 with open('Operation Log.txt', 'a') as f:
-                    f.write('Recorded new jobs in' + str(self.fileTitle) + '.csv @ ' +
+                    f.write('Recorded new jobs in ' + str(self.fileTitle) + '.csv @ ' +
                             str(datetime.now()) + '\n')
-                self.sql.sql_insert(jobs, self.tableTitle)
+                self.sql.sql_insert_jobs(jobs, self.tableTitle)
         else:
             with open('Operation Log.txt', 'a') as f:
                 f.write('No new jobs to record in ' + self.fileTitle +
